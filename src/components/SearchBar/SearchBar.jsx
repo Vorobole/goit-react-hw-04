@@ -1,20 +1,41 @@
-import toast, { Toaster } from "react-hot-toast";
+import css from "./SearchBar.module.css";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import { FiSearch } from "react-icons/fi";
 
-const SearchBar = () => {
-  const notify = () => toast("Please, enter what you want to find. 🤔");
+const SearchBar = ({ onSubmit }) => {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const query = value.trim();
+    if (!query.length) {
+      toast.error("Please, enter what you want to find. 🤔");
+    }
+
+    onSubmit(query);
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setValue(value);
+  };
+
   return (
-    <header>
-      <form>
+    <header className={css.search}>
+      <form className={css.form} onSubmit={handleSubmit}>
         <input
+          className={css.input}
           type="text"
-          //   autocomplete="off"
-          //   autofocus
+          autoComplete="off"
+          autoFocus
           placeholder="Search images and photos"
+          value={value}
+          onChange={handleChange}
         />
-        <button onClick={notify} type="submit">
-          Search
+        <button className={css.searchBtn} type="submit">
+          <FiSearch size="16px" />
         </button>
-        <Toaster />
       </form>
     </header>
   );
